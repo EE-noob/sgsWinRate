@@ -1,0 +1,52 @@
+[
+    {
+        "id": "38a40025-509e-4dda-b38b-4cdacb9a7af1",
+        "username": "sysCall",
+        "password": "scrypt:32768:8:1$07GFdf2i8fXTgAdL$e48ef11cf5127d0ba73d918bb72ef1377c49ae686246e20d8a17794b6820762e86becfcb5ffa9a0a43d784326d28250a442a7301ee57719ce55bd7211b7ba107",
+        "forms": [
+            {
+                "form_name": "\u666e\u901a\u573a\u519c\u6c11",
+                "warriors": [
+                    {
+                        "warrior_name": "\u5b59\u575a",
+                        "wins": 10,
+                        "losses": 5,
+                        "win_rate": "66.67%"
+                    },
+                    {
+                        "warrior_name": "\u795e\u8d75\u4e91",
+                        "wins": 2,
+                        "losses": 0,
+                        "win_rate": "100.0%"
+                    }
+                ]
+            },
+            {
+                "form_name": "\u81f3\u5c0a\u573a\u519c\u6c11",
+                "warriors": [
+                    {
+                        "warrior_name": "\u754c\u8521\u6587\u59ec",
+                        "wins": 4,
+                        "losses": 13,
+                        "win_rate": "23.53%"
+                    }
+                ]
+            },
+            {
+                "form_name": "\u666e\u901a\u573a\u5730\u4e3b",
+                "warriors": [
+                    {
+                        "warrior_name": "\u7559\u8d5e",
+                        "wins": 3,
+                        "losses": 3,
+                        "win_rate": "50.0%"
+                    }
+                ]
+            },
+            {
+                "form_name": "1",
+                "warriors": []
+            }
+        ]
+    }
+]

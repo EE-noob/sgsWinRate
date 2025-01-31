@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>三国杀胜率记录</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <span>欢迎，{{ username }}！</span>
+        <a href="{{ url_for('logout') }}">退出</a>
+    </div>
+
+    <div id="app">
+        <h1>三国杀胜率记录</h1>
+
+        <!-- 新增表单 -->
+        <div class="form-section">
+            <input type="text" id="newFormName" placeholder="输入新表单名称（例如：至尊场）">
+            <button onclick="addNewForm()">新增表单</button>
+        </div>
+
+        <!-- 表单切换标签 -->
+        <div id="formTabs"></div>
+
+        <!-- 当前表单操作区 -->
+        <div id="currentForm">
+            <div class="form-section">
+                <input type="text" id="newWarriorName" placeholder="输入武将名称">
+                <button onclick="addNewWarrior()">新增武将</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>武将名称</th>
+                        <th>胜利场次</th>
+                        <th>失败场次</th>
+                        <th>胜率</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="warriorsBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let currentForm = null;
+
+        // 初始化加载表单标签和数据
+        fetch('/get_data')
+            .then(response => response.json())
+            .then(data => {
+                const formTabs = document.getElementById('formTabs');
+                formTabs.innerHTML = data.forms.map(form => `
+                    <button class="tab-btn" onclick="switchForm('${form.form_name}')">
+                        ${form.form_name}
+                    </button>
+                `).join('');
+
+                if (data.forms.length > 0) {
+                    currentForm = data.forms[0].form_name;
+                    loadWarriors();
+                }
+            });
+
+        // 切换表单
+        function switchForm(formName) {
+            currentForm = formName;
+            loadWarriors();
+        }
+// 增加输入框的值
+function increaseValue(warriorName, field) {
+    const input = document.querySelector(`input[data-warrior="${warriorName}"][data-field="${field}"]`);
+    if (input) {
+        input.value = Math.max(0, parseInt(input.value) + 1); // 确保值非负
+        input.dispatchEvent(new Event('change')); // 触发 onchange 事件
+    }
+}
+
+// 减少输入框的值
+function decreaseValue(warriorName, field) {
+    const input = document.querySelector(`input[data-warrior="${warriorName}"][data-field="${field}"]`);
+    if (input) {
+        input.value = Math.max(0, parseInt(input.value) - 1); // 确保值非负
+        input.dispatchEvent(new Event('change')); // 触发 onchange 事件
+    }
+}
+        // 加载武将数据
+        function loadWarriors() {
+    fetch('/get_data')
+        .then(response => response.json())
+        .then(data => {
+            const form = data.forms.find(f => f.form_name === currentForm);
+            const tbody = document.getElementById('warriorsBody');
+
+            if (!form || !form.warriors) {
+                tbody.innerHTML = '<tr><td colspan="5">暂无武将数据</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = form.warriors.map(warrior => `
+                <tr>
+                    <td>${warrior.warrior_name}</td>
+                    <td>
+                        <div class="wins-control">
+                            <button onclick="decreaseValue('${warrior.warrior_name}', 'wins')">-</button>
+                            <input type="number" min="0" value="${warrior.wins}" 
+                                data-warrior="${warrior.warrior_name}" data-field="wins"
+                                onchange="updateRecord('${warrior.warrior_name}', 'wins', this.value)">
+                            <button onclick="increaseValue('${warrior.warrior_name}', 'wins')">+</button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="losses-control">
+                            <button onclick="decreaseValue('${warrior.warrior_name}', 'losses')">-</button>
+                            <input type="number" min="0" value="${warrior.losses}"
+                                data-warrior="${warrior.warrior_name}" data-field="losses"
+                                onchange="updateRecord('${warrior.warrior_name}', 'losses', this.value)">
+                            <button onclick="increaseValue('${warrior.warrior_name}', 'losses')">+</button>
+                        </div>
+                    </td>
+                    <td>${warrior.win_rate}</td>
+                    <td>
+                        <button onclick="deleteWarrior('${warrior.warrior_name}')">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+        })
+        .catch(error => {
+            console.error('加载武将数据失败:', error);
+            const tbody = document.getElementById('warriorsBody');
+            tbody.innerHTML = '<tr><td colspan="5">加载数据失败，请稍后重试</td></tr>';
+        });
+}
+
+        // 新增表单
+        function addNewForm() {
+            const formName = document.getElementById('newFormName').value;
+            if (!formName) return alert('表单名称不能为空');
+
+            fetch('/add_form', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ form_name: formName })
+            }).then(response => {
+                if (response.ok) location.reload();
+                else alert('操作失败');
+            });
+        }
+
+        // 新增武将
+        function addNewWarrior() {
+            const warriorName = document.getElementById('newWarriorName').value;
+            if (!warriorName) return alert('武将名称不能为空');
+            if (!currentForm) return alert('请先选择表单');
+
+            fetch('/add_warrior', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    form_name: currentForm,
+                    warrior_name: warriorName
+                })
+            }).then(response => {
+                if (response.ok) {
+                    document.getElementById('newWarriorName').value = '';
+                    loadWarriors();
+                } else {
+                    alert('操作失败');
+                }
+            });
+        }
+
+        // 更新记录
+        function updateRecord(warriorName, field, value) {
+            fetch('/update_record', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    form_name: currentForm,
+                    warrior_name: warriorName,
+                    field: field,
+                    value: parseInt(value)
+                })
+            }).then(response => {
+                if (response.ok) loadWarriors();
+            });
+        }
+
+        // 删除武将
+        function deleteWarrior(warriorName) {
+            if (!confirm(`确定删除 ${warriorName} 吗？`)) return;
+            
+            fetch('/delete_warrior', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    form_name: currentForm,
+                    warrior_name: warriorName
+                })
+            }).then(response => {
+                if (response.ok) loadWarriors();
+            });
+        }
+    </script>
+</body>
+</html>
