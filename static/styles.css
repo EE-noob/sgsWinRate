@@ -111,7 +111,7 @@ th {
 }
 
 .error {
-    color: red;
+    color: rgb(255, 68, 0);
     font-size: 0.9em;
 }
 
