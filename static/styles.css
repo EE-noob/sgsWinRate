@@ -1,133 +1,99 @@
+/* 基础样式 */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
     background-color: #f5f5f5;
-    font-size: 16px; /* 增大基础字体大小 */
+    font-size: 16px;
 }
 
-/* 手机端字体更大 */
-@media (max-width: 600px) {
-    body {
-        font-size: 18px; /* 手机端基础字体更大 */
-        padding: 10px;   /* 减少页面边距 */
-    }
+/* --------------- 电脑端默认样式 --------------- */
+body.desktop .wins-control button,
+body.desktop .losses-control button {
+    padding: 12px 20px;
+    font-size: 1.2em;
+    background-color: #4CAF50;
 }
 
+body.desktop input[type="number"] {
+    width: 60px;
+    padding: 8px;
+}
+
+/* --------------- 手机端样式 --------------- */
+body.mobile {
+    font-size: 40px; /* 手机端基础字体更大 */
+    padding: 10px;
+}
+
+
+body.mobile  button {
+    padding: 16px 20px; /* 手机端按钮更大 */
+    font-size: 1.5em;
+    background-color: #2196F3; /* 手机端按钮颜色不同 */
+}
+
+body.mobile input[type="number"] {
+    width: 100px;
+    padding: 12px;
+    font-size: 1.5em;
+}
+
+body.mobile table {
+    font-size: 0.9em;
+}
+
+/* --------------- 其他共用样式 --------------- */
 .navbar {
     background-color: #333;
     color: white;
     padding: 10px 20px;
     text-align: right;
-    font-size: 1.1em; /* 导航栏字体更大 */
-}
-
-.navbar a {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
-}
-
-/* --------------- 场次加减按钮样式 --------------- */
-.wins-losses-control {
     display: flex;
-    gap: 5px; /* 按钮和输入框之间的间隙 */
-    justify-content: center;
+    align-items: center;
+    gap: 20px;
 }
 
-.wins-losses-control button {
-    padding: 12px 20px; /* 增大按钮尺寸 */
-    font-size: 1.2em;   /* 按钮文字更大 */
-    background-color: #4CAF50;
+#toggleModeBtn {
+    padding: 8px 15px;
+    background-color: #666;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
+    color: white;
     cursor: pointer;
-    min-width: 50px;    /* 确保按钮最小宽度 */
 }
 
-.wins-losses-control button:hover {
-    background-color: #45a049;
-}
-
-.wins-losses-control input {
-    width: 80px;
-    padding: 10px;
-    text-align: center;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 1.1em; /* 输入框字体更大 */
-}
-
-/* 手机端按钮更大 */
-@media (max-width: 600px) {
-    .wins-losses-control button {
-        padding: 15px 25px; /* 手机端按钮更大 */
-        font-size: 1.3em;
-    }
-    
-    .wins-losses-control input {
-        width: 70px;
-        padding: 12px;
-    }
-}
-
-/* --------------- 表格字体和间隙优化 --------------- */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    font-size: 1em; /* 表格字体统一 */
-}
-
-th, td {
-    padding: 12px 8px; /* 减少左右间隙 */
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-}
 
 th {
-    background-color: #f8f9fa;
-    font-size: 1.05em; /* 表头字体稍大 */
+    cursor: pointer; /* 鼠标悬停时显示手型 */
+    user-select: none; /* 禁止选中文本 */
+    position: relative;
 }
 
-/* 手机端表格更紧凑 */
-@media (max-width: 600px) {
-    th, td {
-        padding: 10px 6px; /* 手机端进一步减少间隙 */
-        font-size: 0.95em; /* 字体稍小但依然清晰 */
-    }
+th:hover {
+    background-color: #f1f1f1; /* 悬停时背景变色 */
 }
 
-/* --------------- 其他样式保持不变 --------------- */
-.auth-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+/* 排序箭头 */
+th::after {
+    content: '';
+    display: inline-block;
+    margin-left: 5px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #000; /* 默认箭头 */
+    opacity: 0.3;
 }
 
-.error {
-    color: rgb(255, 68, 0);
-    font-size: 0.9em;
+th.asc::after {
+    border-bottom: 5px solid #000;
+    border-top: none;
 }
 
-.form-section {
-    margin: 15px 0; /* 减少表单区域间隙 */
-    padding: 15px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+th.desc::after {
+    border-top: 5px solid #000;
+    border-bottom: none;
 }
-
-button.delete {
-    background-color: #f44336;
-    padding: 8px 15px; /* 删除按钮也增大 */
-}
-
-button.delete:hover {
-    background-color: #e53935;
-}
+/* 保留其他原有样式... */
