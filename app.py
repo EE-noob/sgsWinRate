@@ -160,7 +160,6 @@ def add_warrior():
 
 @app.route('/update_record', methods=['POST'])
 def update_record():
-    """更新胜负场次"""
     user = get_current_user()
     if not user:
         return jsonify({'error': '未登录'}), 401
@@ -169,7 +168,7 @@ def update_record():
     form_name = data.get('form_name')
     warrior_name = data.get('warrior_name')
     field = data.get('field')
-    value = max(0, int(data.get('value')))  # 确保非负
+    value = max(0, int(data.get('value')))
 
     users = load_users()
     for u in users:
@@ -179,8 +178,8 @@ def update_record():
                     for warrior in form['warriors']:
                         if warrior['warrior_name'] == warrior_name:
                             warrior[field] = value
-                            total = warrior['wins'] + warrior['losses']
-                            warrior['win_rate'] = f"{round((warrior['wins'] / total) * 100, 2)}%" if total > 0 else '0%'
+                            warrior['total'] = warrior['wins'] + warrior['losses']
+                            warrior['heat'] = (warrior['total'] * 0.5) + (float(warrior['win_rate'].replace('%', '')) * 0.5)
                             save_users(users)
                             return jsonify({'success': True})
     return jsonify({'error': '数据未找到'}), 404
@@ -222,6 +221,36 @@ def delete_warrior():
                     return jsonify({'success': True})
     return jsonify({'error': '数据未找到'}), 404
 
+
+@app.route('/sort', methods=['POST'])
+def sort_warriors():
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': '未登录'}), 401
+
+    data = request.json
+    form_name = data.get('form_name')
+    sort_field = data.get('sort_field')  # 可选项：total, heat, name
+    is_ascending = data.get('is_ascending', True)
+
+    users = load_users()
+    for u in users:
+        if u['id'] == user['id']:
+            for form in u['forms']:
+                if form['form_name'] == form_name:
+                    # 计算总场次和热度
+                    for warrior in form['warriors']:
+                        warrior['total'] = warrior['wins'] + warrior['losses']
+                        warrior['heat'] = (warrior['total'] * 0.5) + (float(warrior['win_rate'].replace('%', '')) * 0.5)
+                    # 排序逻辑
+                    form['warriors'] = sorted(
+                        form['warriors'],
+                        key=lambda x: x[sort_field] if sort_field != 'name' else x['warrior_name'],
+                        reverse=not is_ascending
+                    )
+                    save_users(users)
+                    return jsonify({'success': True})
+    return jsonify({'error': '操作失败'}), 400
 # if __name__ == '__main__':
 #     app.run(debug=True)
 

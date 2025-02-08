@@ -33,10 +33,12 @@
             <table>
                 <thead>
                     <tr>
-                        <th onclick="sortTable('name')">武将名称</th>
-                        <th onclick="sortTable('wins')">胜利场次</th>
-                        <th onclick="sortTable('losses')">失败场次</th>
-                        <th onclick="sortTable('winRate')">胜率</th>
+                        <th onclick="sortWarriors('name')">武将名称</th>
+                        <th onclick="sortWarriors('wins')">胜利场次</th>
+                        <th onclick="sortWarriors('losses')">失败场次</th>
+                        <th onclick="sortWarriors('total')">总场次</th>
+                        <th onclick="sortWarriors('win_rate')">胜率</th>
+                        <th onclick="sortWarriors('heat')">热度</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -238,47 +240,48 @@ function decreaseValue(warriorName, field) {
             document.getElementById('toggleModeBtn').addEventListener('click', toggleMode);
         });
 
-        let currentSortField = null; // 当前排序字段
-let isAscending = true;      // 是否正序
+        // old sort logic 前端排序
+//         let currentSortField = null; // 当前排序字段
+// let isAscending = true;      // 是否正序
 
-// 排序函数
-function sortTable(field) {
-    const tbody = document.getElementById('warriorsBody');
-    const rows = Array.from(tbody.querySelectorAll('tr'));
+// // 排序函数
+// function sortTable(field) {
+//     const tbody = document.getElementById('warriorsBody');
+//     const rows = Array.from(tbody.querySelectorAll('tr'));
 
-    // 切换排序顺序
-    if (currentSortField === field) {
-        isAscending = !isAscending; // 切换正序/逆序
-    } else {
-        currentSortField = field;
-        isAscending = true; // 默认正序
-    }
+//     // 切换排序顺序
+//     if (currentSortField === field) {
+//         isAscending = !isAscending; // 切换正序/逆序
+//     } else {
+//         currentSortField = field;
+//         isAscending = true; // 默认正序
+//     }
 
-    // 排序逻辑
-    rows.sort((rowA, rowB) => {
-        const valueA = getCellValue(rowA, field);
-        const valueB = getCellValue(rowB, field);
+//     // 排序逻辑
+//     rows.sort((rowA, rowB) => {
+//         const valueA = getCellValue(rowA, field);
+//         const valueB = getCellValue(rowB, field);
 
-        if (field === 'name') {
-            // 按武将名字首字母排序
-            return isAscending ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-        } else if (field === 'winRate') {
-            // 按胜率排序（去掉百分号后比较数字）
-            const numA = parseFloat(valueA.replace('%', ''));
-            const numB = parseFloat(valueB.replace('%', ''));
-            return isAscending ? numA - numB : numB - numA;
-        } else {
-            // 按胜利场次或失败场次排序
-            const numA = parseInt(valueA, 10);
-            const numB = parseInt(valueB, 10);
-            return isAscending ? numA - numB : numB - numA;
-        }
-    });
+//         if (field === 'name') {
+//             // 按武将名字首字母排序
+//             return isAscending ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+//         } else if (field === 'winRate') {
+//             // 按胜率排序（去掉百分号后比较数字）
+//             const numA = parseFloat(valueA.replace('%', ''));
+//             const numB = parseFloat(valueB.replace('%', ''));
+//             return isAscending ? numA - numB : numB - numA;
+//         } else {
+//             // 按胜利场次或失败场次排序
+//             const numA = parseInt(valueA, 10);
+//             const numB = parseInt(valueB, 10);
+//             return isAscending ? numA - numB : numB - numA;
+//         }
+//     });
 
-    // 重新渲染表格
-    tbody.innerHTML = '';
-    rows.forEach(row => tbody.appendChild(row));
-}
+//     // 重新渲染表格
+//     tbody.innerHTML = '';
+//     rows.forEach(row => tbody.appendChild(row));
+// }
 
 // 获取单元格的值
 function getCellValue(row, field) {
@@ -289,6 +292,32 @@ function getCellValue(row, field) {
         winRate: 3
     }[field];
     return row.cells[cellIndex].textContent.trim();
+}
+
+
+//new sort logic
+let currentSortField = 'heat'; // 默认按热度排序
+let isAscending = false;       // 默认降序
+
+function sortWarriors(field) {
+    if (field === currentSortField) {
+        isAscending = !isAscending;
+    } else {
+        currentSortField = field;
+        isAscending = true;
+    }
+    
+    fetch('/sort', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            form_name: currentForm,
+            sort_field: currentSortField,
+            is_ascending: isAscending
+        })
+    }).then(response => {
+        if (response.ok) loadWarriors();
+    });
 }
     </script>
 </body>

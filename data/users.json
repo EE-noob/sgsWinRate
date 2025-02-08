@@ -1,0 +1,30 @@
+[
+    {
+        "id": "dd5a1943-b51c-4a19-866c-efc497826834",
+        "username": "sysCall",
+        "password": "scrypt:32768:8:1$JQ398T2GSfRkumVc$e54c331e909ba3cdb68a64691cc679d2425977161d5fe39ae56652f396838680d29ad3ca578fc44db979fd964173f1c0015d7e3883b1c30caf6e6204adc8ccc8",
+        "forms": [
+            {
+                "form_name": "\u666e\u901a\u573a\u519c\u6c11",
+                "warriors": [
+                    {
+                        "warrior_name": "\u8521\u6587\u59ec",
+                        "wins": 3,
+                        "losses": 1,
+                        "win_rate": "0%",
+                        "total": 4,
+                        "heat": 2.0
+                    },
+                    {
+                        "warrior_name": "\u5b59\u7b56",
+                        "wins": 2,
+                        "losses": 3,
+                        "win_rate": "0%",
+                        "total": 5,
+                        "heat": 2.5
+                    }
+                ]
+            }
+        ]
+    }
+]
