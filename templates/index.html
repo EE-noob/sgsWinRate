@@ -33,15 +33,16 @@
             <table>
                 <thead>
                     <tr>
-                        <th onclick="sortWarriors('name')">武将名称</th>
-                        <th onclick="sortWarriors('wins')">胜利场次</th>
-                        <th onclick="sortWarriors('losses')">失败场次</th>
-                        <th onclick="sortWarriors('total')">总场次</th>
-                        <th onclick="sortWarriors('win_rate')">胜率</th>
-                        <th onclick="sortWarriors('heat')">热度</th>
+                        <th data-sort="name" onclick="sortWarriors('name')">武将名称</th>
+                        <th data-sort="wins" onclick="sortWarriors('wins')">胜利场次</th>
+                        <th data-sort="losses" onclick="sortWarriors('losses')">失败场次</th>
+                        <th data-sort="total" onclick="sortWarriors('total')">总场次</th>
+                        <th data-sort="win_rate" onclick="sortWarriors('win_rate')">胜率</th>
+                        <th data-sort="heat" onclick="sortWarriors('heat')">热度</th>
                         <th>操作</th>
                     </tr>
                 </thead>
+                
                 <tbody id="warriorsBody">
                     <!-- 武将数据动态加载 -->
                 </tbody>
@@ -302,13 +303,29 @@ let currentSortField = 'heat'; // 默认按热度排序
 let isAscending = true;       // 默认升序
 
 function sortWarriors(field) {
+    // 先移除所有表头的排序标识类
+    const thElements = document.querySelectorAll('th');
+    thElements.forEach(th => {
+        th.classList.remove('sorted-asc', 'sorted-desc');
+    });
+
+    // 确定当前排序的列及方向
     if (field === currentSortField) {
-        isAscending = !isAscending;
+        isAscending = !isAscending;  // 切换升降序
     } else {
-        currentSortField = field;
-        isAscending = true;
+        currentSortField = field;    // 设置当前排序字段
+        isAscending = false;          // 默认降序
     }
-    
+
+    // 根据排序的字段和顺序更新箭头
+    const targetTh = document.querySelector(`th[data-sort="${field}"]`);
+    if (isAscending) {
+        targetTh.classList.add('sorted-asc');
+    } else {
+        targetTh.classList.add('sorted-desc');
+    }
+
+    // 发起请求排序
     fetch('/sort', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -321,6 +338,7 @@ function sortWarriors(field) {
         if (response.ok) loadWarriors();
     });
 }
+
     </script>
 </body>
 </html>

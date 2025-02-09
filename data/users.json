@@ -8,47 +8,29 @@
                 "form_name": "\u666e\u901a\u573a\u519c\u6c11",
                 "warriors": [
                     {
-                        "warrior_name": "3",
-                        "wins": 0,
-                        "losses": 1,
-                        "total": 1,
-                        "win_rate": "0.0%",
-                        "heat": 2,
-                        "win_rate_num": 0.0
-                    },
-                    {
-                        "warrior_name": "2",
-                        "wins": 0,
-                        "losses": 1,
-                        "total": 1,
-                        "win_rate": "0.0%",
-                        "heat": 3,
-                        "win_rate_num": 0.0
-                    },
-                    {
-                        "warrior_name": "\u662f\u5427",
-                        "wins": 0,
-                        "losses": 2,
-                        "total": 2,
-                        "win_rate": "0.0%",
-                        "heat": 3,
-                        "win_rate_num": 0.0
-                    },
-                    {
                         "warrior_name": "\u5f90\u76db",
                         "wins": 6,
-                        "losses": 92,
-                        "total": 98,
-                        "win_rate": "6.12%",
+                        "losses": 102,
+                        "total": 108,
+                        "win_rate": "5.56%",
                         "heat": 0,
                         "win_rate_num": 6.12
                     },
                     {
+                        "warrior_name": "\u8521\u6587\u59ec",
+                        "wins": 31,
+                        "losses": 15,
+                        "win_rate": "67.39%",
+                        "total": 46,
+                        "heat": 0,
+                        "win_rate_num": 79.49
+                    },
+                    {
                         "warrior_name": "\u5b59\u7b56",
                         "wins": 8,
-                        "losses": 52,
-                        "win_rate": "13.33%",
-                        "total": 60,
+                        "losses": 42,
+                        "win_rate": "16.0%",
+                        "total": 50,
                         "heat": 1,
                         "win_rate_num": 13.33
                     },
@@ -60,6 +42,33 @@
                         "win_rate": "16.67%",
                         "heat": 1,
                         "win_rate_num": 16.67
+                    },
+                    {
+                        "warrior_name": "\u8d75\u4e91",
+                        "wins": 12,
+                        "losses": 17,
+                        "total": 29,
+                        "win_rate": "41.38%",
+                        "heat": 1,
+                        "win_rate_num": 41.38
+                    },
+                    {
+                        "warrior_name": "3",
+                        "wins": 0,
+                        "losses": 5,
+                        "total": 5,
+                        "win_rate": "0.0%",
+                        "heat": 2,
+                        "win_rate_num": 0.0
+                    },
+                    {
+                        "warrior_name": "\u662f\u5427",
+                        "wins": 0,
+                        "losses": 3,
+                        "total": 3,
+                        "win_rate": "0.0%",
+                        "heat": 2,
+                        "win_rate_num": 0.0
                     },
                     {
                         "warrior_name": "yuans",
@@ -80,22 +89,13 @@
                         "win_rate_num": 40.0
                     },
                     {
-                        "warrior_name": "\u8d75\u4e91",
-                        "wins": 12,
-                        "losses": 16,
-                        "total": 28,
-                        "win_rate": "42.86%",
-                        "heat": 1,
-                        "win_rate_num": 42.86
-                    },
-                    {
-                        "warrior_name": "\u8521\u6587\u59ec",
-                        "wins": 31,
-                        "losses": 8,
-                        "win_rate": "79.49%",
-                        "total": 39,
-                        "heat": 0,
-                        "win_rate_num": 79.49
+                        "warrior_name": "5",
+                        "wins": 2,
+                        "losses": 0,
+                        "total": 2,
+                        "win_rate": "100.0%",
+                        "heat": 2,
+                        "win_rate_num": 100.0
                     },
                     {
                         "warrior_name": "4",
@@ -107,16 +107,25 @@
                         "win_rate_num": 100.0
                     },
                     {
-                        "warrior_name": "5",
-                        "wins": 2,
-                        "losses": 0,
-                        "total": 2,
-                        "win_rate": "100.0%",
+                        "warrior_name": "2",
+                        "wins": 0,
+                        "losses": 1,
+                        "total": 1,
+                        "win_rate": "0.0%",
                         "heat": 3,
-                        "win_rate_num": 100.0
+                        "win_rate_num": 0.0
+                    },
+                    {
+                        "warrior_name": "55",
+                        "wins": 0,
+                        "losses": 0,
+                        "total": 0,
+                        "win_rate": "0%",
+                        "heat": 3,
+                        "win_rate_num": 0.0
                     }
                 ],
-                "last_rank_update_time": 1739111985.6454966
+                "last_rank_update_time": 1739113681.1818423
             },
             {
                 "form_name": "\u81f3\u5c0a\u573a\u519c\u6c11",
