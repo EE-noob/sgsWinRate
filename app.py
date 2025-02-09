@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import json
 import os
 import uuid
-
+import time
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # 设置安全的随机密钥
 
@@ -101,6 +101,7 @@ def logout():
 def get_data():
     """获取当前用户数据"""
     user = get_current_user()
+
     if not user:
         return jsonify({'error': '未登录'}), 401
     return jsonify({'forms': user.get('forms', [])})
@@ -152,7 +153,9 @@ def add_warrior():
                         'warrior_name': warrior_name,
                         'wins': 0,
                         'losses': 0,
-                        'win_rate': '0%'
+                        'total': 0,
+                        'win_rate': '0%',
+                        'heat': 0
                     })
                     save_users(users)
                     return jsonify({'success': True})
@@ -179,6 +182,7 @@ def update_record():
                         if warrior['warrior_name'] == warrior_name:
                             warrior[field] = value
                             warrior['total'] = warrior['wins'] + warrior['losses']
+                            warrior['win_rate'] = f"{round((warrior['wins'] / warrior['total']) * 100, 2)}%" if warrior['total'] > 0 else '0%'
                             warrior['heat'] = (warrior['total'] * 0.5) + (float(warrior['win_rate'].replace('%', '')) * 0.5)
                             save_users(users)
                             return jsonify({'success': True})
@@ -222,6 +226,8 @@ def delete_warrior():
     return jsonify({'error': '数据未找到'}), 404
 
 
+
+
 @app.route('/sort', methods=['POST'])
 def sort_warriors():
     user = get_current_user()
@@ -230,27 +236,62 @@ def sort_warriors():
 
     data = request.json
     form_name = data.get('form_name')
-    sort_field = data.get('sort_field')  # 可选项：total, heat, name
+    sort_field = data.get('sort_field')  # 可选项：total, heat, name, win_rate
     is_ascending = data.get('is_ascending', True)
 
     users = load_users()
+    current_time = time.time()
+
     for u in users:
         if u['id'] == user['id']:
             for form in u['forms']:
                 if form['form_name'] == form_name:
-                    # 计算总场次和热度
+                    # 计算总场次和热度，始终实时更新
                     for warrior in form['warriors']:
                         warrior['total'] = warrior['wins'] + warrior['losses']
-                        warrior['heat'] = (warrior['total'] * 0.5) + (float(warrior['win_rate'].replace('%', '')) * 0.5)
+                        warrior['win_rate_num'] = float(warrior['win_rate'].replace('%', ''))
+                        
+
+                    # 如果距离上次更新胜率排名已超过一定时间，则重新计算
+                    if current_time - form.get('last_rank_update_time', 0) > 2:#300:  # 5分钟（300秒）
+                        # 排序武将根据胜率
+                        sorted_by_win_rate = sorted(form['warriors'], key=lambda x: x['win_rate_num'], reverse=True)
+                        # 排序武将根据场次
+                        sorted_by_total = sorted(form['warriors'], key=lambda x: x['total'], reverse=True)
+
+                        num_warriors = len(sorted_by_win_rate)
+
+                        for warrior in form['warriors']:
+                            # 获取胜率排名和场次排名
+                            win_rank = sorted_by_win_rate.index(warrior)
+                            total_rank = sorted_by_total.index(warrior)
+
+                            # 计算热度：加权和（胜率排名 + 场次排名）
+                            # 权重：胜率权重 0.6，场次权重 0.4
+                            normalized_heat = round(
+                                0.6 * (win_rank / (num_warriors - 1)) + 0.4 * (total_rank / (num_warriors - 1))
+                            * 3)  # 归一化到 0 到 3 之间
+                            print(normalized_heat)
+                            # # 更新武将的热度
+                            # warrior['heat'] = normalized_heat
+
+                        # 更新胜率排名的更新时间戳
+                        form['last_rank_update_time'] = current_time
+
+                    # 更新武将的热度
+                    warrior['heat'] = normalized_heat
                     # 排序逻辑
                     form['warriors'] = sorted(
                         form['warriors'],
-                        key=lambda x: x[sort_field] if sort_field != 'name' else x['warrior_name'],
+                        key=lambda x: (float(x[sort_field].replace('%', '')) if sort_field == 'win_rate' else x[sort_field]),
                         reverse=not is_ascending
                     )
                     save_users(users)
                     return jsonify({'success': True})
+
     return jsonify({'error': '操作失败'}), 400
+
+
 # if __name__ == '__main__':
 #     app.run(debug=True)
 

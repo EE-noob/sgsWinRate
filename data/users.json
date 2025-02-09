@@ -9,19 +9,70 @@
                 "warriors": [
                     {
                         "warrior_name": "\u8521\u6587\u59ec",
-                        "wins": 3,
-                        "losses": 1,
-                        "win_rate": "0%",
-                        "total": 4,
-                        "heat": 2.0
+                        "wins": 6,
+                        "losses": 0,
+                        "win_rate": "100.0%",
+                        "total": 6,
+                        "heat": 53.0,
+                        "win_rate_num": 75.0
+                    },
+                    {
+                        "warrior_name": "dch",
+                        "wins": 5,
+                        "losses": 22,
+                        "total": 27,
+                        "win_rate": "18.52%",
+                        "heat": 22.759999999999998,
+                        "win_rate_num": 20.83
+                    },
+                    {
+                        "warrior_name": "\u8d75\u4e91",
+                        "wins": 5,
+                        "losses": 5,
+                        "total": 10,
+                        "win_rate": "50.0%",
+                        "heat": 30.0,
+                        "win_rate_num": 50.0
                     },
                     {
                         "warrior_name": "\u5b59\u7b56",
+                        "wins": 8,
+                        "losses": 42,
+                        "win_rate": "16.0%",
+                        "total": 50,
+                        "heat": 33.0,
+                        "win_rate_num": 16.0
+                    },
+                    {
+                        "warrior_name": "\u5f90\u76db",
+                        "wins": 6,
+                        "losses": 84,
+                        "total": 90,
+                        "win_rate": "6.67%",
+                        "heat": 48.335,
+                        "win_rate_num": 6.67
+                    }
+                ],
+                "last_rank_update_time": 1739109787.3327687
+            },
+            {
+                "form_name": "\u81f3\u5c0a\u573a\u519c\u6c11",
+                "warriors": [
+                    {
+                        "warrior_name": "\u5b59\u7b56",
                         "wins": 2,
-                        "losses": 3,
-                        "win_rate": "0%",
-                        "total": 5,
-                        "heat": 2.5
+                        "losses": 0,
+                        "total": 2,
+                        "win_rate": "100.0%",
+                        "heat": 51.0
+                    },
+                    {
+                        "warrior_name": "\u8d75\u4e91",
+                        "wins": 2,
+                        "losses": 0,
+                        "total": 2,
+                        "win_rate": "100.0%",
+                        "heat": 51.0
                     }
                 ]
             }

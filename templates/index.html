@@ -125,7 +125,9 @@ function decreaseValue(warriorName, field) {
                             <button onclick="increaseValue('${warrior.warrior_name}', 'losses')">+</button>
                         </div>
                     </td>
+                    <td>${warrior.total}</td>
                     <td>${warrior.win_rate}</td>
+                    <td>${warrior.heat}</td>
                     <td>
                         <button onclick="deleteWarrior('${warrior.warrior_name}')">删除</button>
                     </td>
