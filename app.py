@@ -183,7 +183,7 @@ def update_record():
                             warrior[field] = value
                             warrior['total'] = warrior['wins'] + warrior['losses']
                             warrior['win_rate'] = f"{round((warrior['wins'] / warrior['total']) * 100, 2)}%" if warrior['total'] > 0 else '0%'
-                            warrior['heat'] = (warrior['total'] * 0.5) + (float(warrior['win_rate'].replace('%', '')) * 0.5)
+                            #warrior['heat'] = (warrior['total'] * 0.5) + (float(warrior['win_rate'].replace('%', '')) * 0.5)
                             save_users(users)
                             return jsonify({'success': True})
     return jsonify({'error': '数据未找到'}), 404
@@ -237,7 +237,7 @@ def sort_warriors():
     data = request.json
     form_name = data.get('form_name')
     sort_field = data.get('sort_field')  # 可选项：total, heat, name, win_rate
-    is_ascending = data.get('is_ascending', True)
+    is_ascending = data.get('is_ascending', False)  # 默认为降序排序
 
     users = load_users()
     current_time = time.time()
@@ -252,31 +252,31 @@ def sort_warriors():
                         warrior['win_rate_num'] = float(warrior['win_rate'].replace('%', ''))
                         
 
-                    # 如果距离上次更新胜率排名已超过一定时间，则重新计算
-                    if current_time - form.get('last_rank_update_time', 0) > 2:#300:  # 5分钟（300秒）
-                        # 排序武将根据胜率
-                        sorted_by_win_rate = sorted(form['warriors'], key=lambda x: x['win_rate_num'], reverse=True)
-                        # 排序武将根据场次
-                        sorted_by_total = sorted(form['warriors'], key=lambda x: x['total'], reverse=True)
+                    # # 如果距离上次更新胜率排名已超过一定时间，则重新计算
+                    # if current_time - form.get('last_rank_update_time', 0) > 2:#300:  # 5分钟（300秒）
+                    # 排序武将根据胜率
+                    sorted_by_win_rate = sorted(form['warriors'], key=lambda x: x['win_rate_num'], reverse=True)
+                    # 排序武将根据场次
+                    sorted_by_total = sorted(form['warriors'], key=lambda x: x['total'], reverse=True)
 
-                        num_warriors = len(sorted_by_win_rate)
+                    num_warriors = len(sorted_by_win_rate)
 
-                        for warrior in form['warriors']:
-                            # 获取胜率排名和场次排名
-                            win_rank = sorted_by_win_rate.index(warrior)
-                            total_rank = sorted_by_total.index(warrior)
+                    for warrior in form['warriors']:
+                        # 获取胜率排名和场次排名
+                        win_rank = sorted_by_win_rate.index(warrior)
+                        total_rank = sorted_by_total.index(warrior)
 
-                            # 计算热度：加权和（胜率排名 + 场次排名）
-                            # 权重：胜率权重 0.6，场次权重 0.4
-                            normalized_heat = round(
-                                0.6 * (win_rank / (num_warriors - 1)) + 0.4 * (total_rank / (num_warriors - 1))
-                            * 3)  # 归一化到 0 到 3 之间
-                            print(normalized_heat)
-                            # # 更新武将的热度
-                            # warrior['heat'] = normalized_heat
+                        # 计算热度：加权和（胜率排名 + 场次排名）
+                        # 权重：胜率权重 0.6，场次权重 0.4
+                        normalized_heat = round(
+                            0.6 * (win_rank / (num_warriors - 1)) + 0.4 * (total_rank / (num_warriors - 1))
+                        * 5)  # 归一化到 0 到 3 之间
+                        print(normalized_heat)
+                        # # 更新武将的热度
+                        # warrior['heat'] = normalized_heat
 
-                        # 更新胜率排名的更新时间戳
-                        form['last_rank_update_time'] = current_time
+                    # 更新胜率排名的更新时间戳
+                    form['last_rank_update_time'] = current_time
 
                     # 更新武将的热度
                     warrior['heat'] = normalized_heat

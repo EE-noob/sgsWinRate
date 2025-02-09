@@ -127,7 +127,7 @@ function decreaseValue(warriorName, field) {
                     </td>
                     <td>${warrior.total}</td>
                     <td>${warrior.win_rate}</td>
-                    <td>${warrior.heat}</td>
+                    <td>t${warrior.heat}</td>
                     <td>
                         <button onclick="deleteWarrior('${warrior.warrior_name}')">删除</button>
                     </td>
@@ -299,7 +299,7 @@ function getCellValue(row, field) {
 
 //new sort logic
 let currentSortField = 'heat'; // 默认按热度排序
-let isAscending = false;       // 默认降序
+let isAscending = true;       // 默认升序
 
 function sortWarriors(field) {
     if (field === currentSortField) {
